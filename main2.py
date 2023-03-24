@@ -14,10 +14,25 @@ from colorama import Fore
 
 ###definition des variables globales 
 sc = nmap.PortScanner()
+ports = '20,21,22,23,25,53,67,68,80,143,161,443,587,554,8000,9000,8888,6001'
+
+""" 20: FTP data
+21: FTP control port
+22: SSH
+23: Telnet (Insecure, not recommended for most uses)
+25: SMTP
+53: DNS services
+67: DHCP server port
+68: DHCP client port
+80: HTTP - Unencrypted Web traffic
+143: IMAP mail port
+161: SNMP
+443: HTTPS - Secure web traffic
+587: SMTP - message submission port """
 
 ###définition des fonctions utilisées dans le programme
 #Fonction principale (celle lancée au démarrage du script après les print pour afficher le )
-def main(): 
+def start(): 
     #ici on affiche les différents scanne que va faire le programme 
     print("1-Discover active hosts on the network with OS infos\n2-Discover the ports and services on display\n3-Discover vulnerabilites\n4-Check for ExploitDB script\n5-Attempt brute force attack\n6-Default account ?\n7-Generate the audit report\n\n")
     #On stock le choix de l'utilisateur dans une variable
@@ -45,43 +60,46 @@ def main():
 def nmap_ping_OS():
     print("-----Welcome to ping and OS scan-----\n")
     ip = input("Please enter the network adress (addr/mask) : ")
-    sc.scan(hosts = ip, arguments="-n -sP")
-    print(sc.scaninfo())
-    print(sc[ip]['tcp'].keys())
+    #sc.scan(hosts = ip, arguments="-n -sP")
+    sc.scan(hosts='192.168.43.244', arguments=f'-p {ports} -sS -O --osscan-guess -Pn')
+    print("scan info :" + str(sc.scaninfo()))
+    print("Tous les hotes : " + str(sc.all_hosts()))
+    for host in sc.all_hosts():
+        os_class = sc[host].get('osclass', {})
+        vendor = os_class.get('vendor', '')
+        os_family = os_class.get('osfamily', '')
+        print("OS class :" + str(os_class))
+        print("vendor : "+ str(vendor))
+        print("os family :"+ str(os_family))
+    if vendor == 'Reolink' or os_family == 'trouver OS Iot':
+        print(f'{host} is an IoT device')
+    #if 'tcp' in sc[ip]:
+    #    print(sc[ip]['tcp'].keys())
     #affiche l'état de la machine up/down
-    print('State : '+sc[ip].state())
+    #print('State : '+sc[ip].state())
+    start()
 
 #Fonction permettant de récupérer les ports et services ouverts avec leur version
 def nmap_ports_and_service():
     print("-----Welcome to ports and service scan-----\n")
     ip = input("Please enter the network adress (addr/mask) : ")
     #on lance la commande nmap -sV -sS sur la range d'ip souaitée
-    sc.scan(ip,'1-1024',"-sV -sS")
-    #on parcours les protocoles de chaque ip scannée
-    for proto in sc[ip].all_protocols(): 
-        #on range dans une liste les ports scannés
-        lport = list(sc[ip][proto].keys()) 
-        #on range ces protocoles dans l'ordre 
-        lport.sort() 
-    #on parcours les ports de la liste    
-    for port in lport: 
-        # si le service n'est pas devinable, on affiche unknown
-        if(sc[ip][proto][port]['product']=="") :
-            procesus = "unknown"
-        #sinon on récupère ce service avec les infos
-        else :
-            procesus = sc[ip][proto][port]['product']
-    # si la version du service est inconnue on affiche unknown
-    if(sc[ip][proto][port]['version']==""):
-        version = "unknown"
-    else:
-        version = sc[ip][proto][port]['version']
-    #affichage des informations    
-    print(str(port)+"/"+proto+" "+sc[ip][proto][port]['state']+" "+procesus+" / "+version)
+    global ports
+    sc.scan(hosts='192.168.44.244', arguments=f'-p {ports} -sV -Pn')
+    for host in sc.all_hosts():
+        print(f'Host: {host}')
+        for proto in sc[host].all_protocols():
+            print(f'Protocol: {proto}')
+            ports = sc[host][proto].keys()
+            for port in ports:
+                service = sc[host][proto][port]['name']
+                print(f'Port: {port}, Service: {service}')
 
 #Fonction permettant de regarder les vulnérabilités d'une machine (CVE et defaut technique)
 def nmap_vuln():
     print("-----Welcome to vulnscan check-----\n")
+    #nmap --script vulscan/ -sV 192.168.43.244
+    #nmap -sV --script vulners 192.168.43.244 
     ip = input("Please enter the network adress (addr/mask) : ")
     print(os.system('nmap -sV --script=vulscan.nse '+ip))
 
@@ -132,5 +150,5 @@ sleep(1)
 print("\nIoT Scanner menu :\n\n")
 
 #lancement de la fonction principale
-main()
+start()
 
