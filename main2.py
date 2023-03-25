@@ -61,27 +61,27 @@ def nmap_ping_OS():
     print("-----Welcome to ping and OS scan-----\n")
     #ip = input("Please enter the network adress (addr/mask) : ")
     #sc.scan(hosts = ip, arguments="-n -sP")
-    sc.scan(hosts='192.168.43.244', arguments=f' --script vulners.nse -p {ports} -sV -sS -O --osscan-guess -Pn')
-    print("Hôtes découverts : " + str(sc.all_hosts()))
-    for host in sc.all_hosts():
-        if 'hostnames' in sc[host]:
-            if 'name' in sc[host]['hostnames']:
-                print('Name of the device : %s' % sc[host]['hostnames']['name'])
-        if 'addresses' in sc[host]:
-            if 'ipv4' in sc[host]['addresses']:
-                print('IP Address : %s' % sc[host]['addresses']['ipv4'])
-        if 'status' in sc[host]:
-            if 'state' in sc[host]['status']:
-                print('State : %s' % sc[host]['status']['state'])
-        if 'osmatch' in sc[host]:
-            first_osmatch = sc[host]['osmatch'][-1]
-            if 'name' in first_osmatch :
-                print('Name of the product : %s' % first_osmatch['name'])
-            if 'osclass' in first_osmatch:
-                osclass = first_osmatch['osclass']
-                print('Type of device : %s' % osclass[0]['type'])
-                print('Vendor : %s' % osclass[0]['vendor'])
-                print('OS family : %s' % osclass[0]['osfamily'])
+    sc.scan(hosts='192.168.43.249', arguments=f' --script vulners.nse -p {ports} -sV -A -sS -O --osscan-guess -Pn')
+    resultat = sc.all_hosts()[0]
+    ip_address = resultat
+    name_of_device = sc[resultat]['hostnames'][0]['name']
+    state = sc[resultat]['status']['state']
+
+    osmatch = sc[resultat]['osmatch'][-1]
+    type_of_device = osmatch['osclass'][0]['type']
+    vendor = osmatch['osclass'][0]['vendor']
+    os_family = osmatch['osclass'][0]['osfamily']
+    name_of_product = osmatch['name']
+
+    print(f"Name of device: {name_of_device}")
+    print(f"IP Address: {ip_address}")
+    print(f"State: {state}")
+    print(f"Type of device: {type_of_device}")
+    print(f"Vendor: {vendor}")
+    print(f"OS Family: {os_family}")
+    print(f"Name of product: {name_of_product}")
+    print(f"OSMATCH : {sc[resultat]}")
+    
     start()
 
 #Fonction permettant de récupérer les ports et services ouverts avec leur version
