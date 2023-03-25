@@ -59,24 +59,29 @@ def start():
 #Fonction permettant de récupérer les informations sur l'OS de la machine
 def nmap_ping_OS():
     print("-----Welcome to ping and OS scan-----\n")
-    ip = input("Please enter the network adress (addr/mask) : ")
+    #ip = input("Please enter the network adress (addr/mask) : ")
     #sc.scan(hosts = ip, arguments="-n -sP")
-    sc.scan(hosts='192.168.43.244', arguments=f'-p {ports} -sS -O --osscan-guess -Pn')
-    print("scan info :" + str(sc.scaninfo()))
-    print("Tous les hotes : " + str(sc.all_hosts()))
+    sc.scan(hosts='192.168.43.244', arguments=f' --script vulners.nse -p {ports} -sV -sS -O --osscan-guess -Pn')
+    print("Hôtes découverts : " + str(sc.all_hosts()))
     for host in sc.all_hosts():
-        os_class = sc[host].get('osclass', {})
-        vendor = os_class.get('vendor', '')
-        os_family = os_class.get('osfamily', '')
-        print("OS class :" + str(os_class))
-        print("vendor : "+ str(vendor))
-        print("os family :"+ str(os_family))
-    if vendor == 'Reolink' or os_family == 'trouver OS Iot':
-        print(f'{host} is an IoT device')
-    #if 'tcp' in sc[ip]:
-    #    print(sc[ip]['tcp'].keys())
-    #affiche l'état de la machine up/down
-    #print('State : '+sc[ip].state())
+        if 'hostnames' in sc[host]:
+            if 'name' in sc[host]['hostnames']:
+                print('Name of the device : %s' % sc[host]['hostnames']['name'])
+        if 'addresses' in sc[host]:
+            if 'ipv4' in sc[host]['addresses']:
+                print('IP Address : %s' % sc[host]['addresses']['ipv4'])
+        if 'status' in sc[host]:
+            if 'state' in sc[host]['status']:
+                print('State : %s' % sc[host]['status']['state'])
+        if 'osmatch' in sc[host]:
+            first_osmatch = sc[host]['osmatch'][-1]
+            if 'name' in first_osmatch :
+                print('Name of the product : %s' % first_osmatch['name'])
+            if 'osclass' in first_osmatch:
+                osclass = first_osmatch['osclass']
+                print('Type of device : %s' % osclass[0]['type'])
+                print('Vendor : %s' % osclass[0]['vendor'])
+                print('OS family : %s' % osclass[0]['osfamily'])
     start()
 
 #Fonction permettant de récupérer les ports et services ouverts avec leur version
@@ -85,7 +90,7 @@ def nmap_ports_and_service():
     ip = input("Please enter the network adress (addr/mask) : ")
     #on lance la commande nmap -sV -sS sur la range d'ip souaitée
     global ports
-    sc.scan(hosts='192.168.44.244', arguments=f'-p {ports} -sV -Pn')
+    sc.scan(hosts='192.168.44.249', arguments=f'--script vulners.nse -p {ports} -sV -Pn')
     for host in sc.all_hosts():
         print(f'Host: {host}')
         for proto in sc[host].all_protocols():
