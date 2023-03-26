@@ -11,6 +11,7 @@ import os, datetime
 import nmap
 from time import sleep
 from colorama import Fore
+import requests
 
 ###definition des variables globales 
 sc = nmap.PortScanner()
