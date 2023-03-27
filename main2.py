@@ -62,9 +62,13 @@ def nmap_ping_OS():
     print("-----Welcome to ping and OS scan-----\n")
     #ip = input("Please enter the network adress (addr/mask) : ")
     #sc.scan(hosts = ip, arguments="-n -sP")
-    sc.scan(hosts='192.168.43.249', arguments=f' --script vulners.nse -p {ports} -sV -A -sS -O --osscan-guess -Pn')
+    sc.scan(hosts='192.168.43.244', arguments=f' --script vulners.nse -p {ports} -sV -A -sS -O --osscan-guess -Pn')
     resultat = sc.all_hosts()[0]
     ip_address = resultat
+    if 'mac' in sc[resultat]['addresses']:
+        mac_address = sc[resultat]['addresses']['mac']
+    else:
+        mac_address = "None"
     name_of_device = sc[resultat]['hostnames'][0]['name']
     state = sc[resultat]['status']['state']
 
@@ -76,12 +80,12 @@ def nmap_ping_OS():
 
     print(f"Name of device: {name_of_device}")
     print(f"IP Address: {ip_address}")
+    print(f"MAC Address: {mac_address}")
     print(f"State: {state}")
     print(f"Type of device: {type_of_device}")
     print(f"Vendor: {vendor}")
     print(f"OS Family: {os_family}")
     print(f"Name of product: {name_of_product}")
-    print(f"OSMATCH : {sc[resultat]}")
     
     start()
 
