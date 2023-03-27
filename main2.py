@@ -113,12 +113,14 @@ def nmap_vuln():
 #Fonction permettant de vérifier si il existe ou non un script dans exploitDB pouvant être utilisé pour attaquer la machine
 def exploit_db_script():
     print("-----Welcome to exploitDB script check-----\n")
+    url = "https://www.exploit-db.com/search"
     headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)>    url = "https://www.exploit-db.com/search"
-        search_term = input('recherche : ')
-        params = {'action': 'search', 'value': search_term}
-        response = requests.get(url, headers=headers, params=params)
-        print(response.text)
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
+    }
+    search_term = input('recherche : ')
+    params = {'action': 'search', 'value': search_term}
+    response = requests.get(url, headers=headers, params=params)
+    print(response.text)
 
 
 
@@ -164,4 +166,3 @@ print("\nIoT Scanner menu :\n\n")
 
 #lancement de la fonction principale
 start()
-
