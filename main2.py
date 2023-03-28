@@ -1,9 +1,10 @@
-# Avant utilisation, depuis un environnement Debian...
+# Avant utilisation, depuis un environnement Debian ou Kali Linux...
 # Veillez à installer python3 sur la machine
 # Veillez à installer nmap : apt-get install nmap ou npm install nmap
+# Veillez à installer exploitdb : apt-get install exploitdb ou bien git clone https://github.com/offensive-security/exploitdb.git
 # Veillez à installer python-nmap sur la machine : pip3 install python-nmap (apt-get install pip ou pip3 si besoin)
 # Veillez à installer colorama sur la machine : pip3 install colorama
-# Veillez à installer hashcat : apt-get install hashcat
+# Veillez à installer hydra : apt-get install hydra
 # doc utile :https://xael.org/pages/python-nmap-en.html#:~:text=python-nmap%20is%20a%20python,can%20even%20be%20used%20asynchronously
 
 # Importation des librairies nécessaires
@@ -160,7 +161,7 @@ if __name__ == '__main__':
 def brute_force():
     print("-----Welcome to brute force attempt-----\n")
     # on lance hashcat
-    os.system('hashcat')
+    os.system('hydra')
 
 # Fonction permettant de vérifier la présence de compte usine
 
