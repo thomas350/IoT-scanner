@@ -191,5 +191,9 @@ print("[" + Fore.YELLOW + "*" + Fore.WHITE + "]" + Fore.BLUE +
 sleep(1)
 print("\nIoT Scanner menu :\n\n")
 
+<<<<<<< HEAD
 # lancement de la fonction principale
+=======
+#lancement de la fonction principale
+>>>>>>> refs/remotes/origin/main
 start()
