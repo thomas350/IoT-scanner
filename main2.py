@@ -139,14 +139,21 @@ def nmap_vuln():
 # Fonction permettant de vérifier si il existe ou non un script dans exploitDB pouvant être utilisé pour attaquer la machine
 def exploit_db_script():
     print("-----Welcome to exploitDB script check-----\n")
-    url = "https://www.exploit-db.com/search"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-    }
-    search_term = input('recherche : ')
-    params = {'action': 'search', 'value': search_term}
-    response = requests.get(url, headers=headers, params=params)
-    print(response.text)
+    #url = "https://www.exploit-db.com/search"
+    #headers = {
+    #    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+    #}
+    #search_term = input('recherche : ')
+    #params = {'action': 'search', 'value': search_term}
+    #response = requests.get(url, headers=headers, params=params)
+    #print(response.text)
+    service = input('service : ')
+    version = input('version : ')
+    #documentation : https://www.exploit-db.com/searchsploit
+    print(os.system('searchsploit '+ service + ' ' + version + ' -w'))
+
+if __name__ == '__main__':
+    exploit_db_script()
 
 
 # Fonction permettant de récupérer faire un bruteforce avec hashcat
