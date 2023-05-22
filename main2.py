@@ -1,6 +1,7 @@
 # Avant utilisation, depuis un environnement Debian ou Kali Linux...
 # Veillez à installer python3 sur la machine
 # Veillez à installer nmap : apt-get install nmap ou npm install nmap
+# Veillez à installer searchsploit : apt-get install git puis git clone https://github.com/offensive-security/exploitdb.git
 # Veillez à installer exploitdb : apt-get install exploitdb ou bien git clone https://github.com/offensive-security/exploitdb.git
 # Veillez à installer python-nmap sur la machine : pip3 install python-nmap (apt-get install pip ou pip3 si besoin)
 # Veillez à installer colorama sur la machine : pip3 install colorama
@@ -152,9 +153,6 @@ def exploit_db_script():
     version = input('version : ')
     #documentation : https://www.exploit-db.com/searchsploit
     print(os.system('searchsploit '+ service + ' ' + version + ' -w'))
-
-if __name__ == '__main__':
-    exploit_db_script()
 
 
 # Fonction permettant de récupérer faire un bruteforce avec hashcat
