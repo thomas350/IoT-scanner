@@ -149,6 +149,27 @@ def exploit_db_script():
     #params = {'action': 'search', 'value': search_term}
     #response = requests.get(url, headers=headers, params=params)
     #print(response.text)
+    
+    
+    
+#import os
+#import nmap
+
+#def exploit_db_script():
+    #print("-----Welcome to exploitDB script check-----\n")
+    #network = input("Enter the network (in CIDR format) to scan: ")
+    #nm = nmap.PortScanner()
+    #nm.scan(network, arguments='-sV')
+
+    #for host in nm.all_hosts():
+     #   print("Checking services for IP:", host)
+      #  for proto in nm[host].all_protocols():
+       #     lport = nm[host][proto].keys()
+        #    for port in lport:
+         #       service = nm[host][proto][port]['name']
+          #      version = nm[host][proto][port]['version']
+           #     exploit_cmd = 'searchsploit ' + service + ' ' + version + ' -w'
+            #    print(os.system(exploit_cmd))
     service = input('service : ')
     version = input('version : ')
     #documentation : https://www.exploit-db.com/searchsploit
